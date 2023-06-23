@@ -1,0 +1,82 @@
+/*class Usuario {
+    constructor(nombre, apellido,libros, mascotas){
+        this.nombre = nombre,
+        this.apellido = apellido,
+        this.libros = libros,
+        this.mascotas = mascotas
+    }
+    getfullname(){
+        const fullname = `${this.nombre} ${this.apellido}`
+        return fullname
+    }
+    addMascota(mascota){
+        this.mascotas.push(mascota)
+    }
+    countMascotas(){
+        let contador = this.mascotas.length
+        return contador
+    }
+    addBook(libro, escrito){
+        this.libros.push({ nombre: libro, autor: escrito})
+    }
+    getBookNames(){
+        const arrayName =[ ] 
+        for(let i = 0; i < this.libros.length; i++){
+            arrayName.push(this.libros[i].nombre)
+        }
+        return arrayName
+    }
+}
+let nombre = 'Luciano', apellido = 'Bonifacio', libros = [], mascotas = []
+
+let usuario = new Usuario (nombre, apellido, libros, mascotas);
+usuario.addMascota('budy')
+usuario.addMascota('newton')
+usuario.addBook('juan',' jose')
+}
+const tiempo = () => new Promise(resolve => {
+    let refTimer = setInterval(() => resolve(refTimer),2000)
+})
+async function mostrarClaveValor(obj){
+    let entries = Object.entries(obj)
+    for(let entrie of entries ){
+        console.log(entrie)
+        let refTimer = await tiempo()
+        console.log(refTimer)
+        clearInterval(refTimer)
+    }
+}
+
+console.log('Principio');
+mostrarClaveValor({nombre:'Daniel', apellido: 'Bonifacio', edad: 18});
+console.log('fin');
+
+const fs = require('fs')
+
+const prueba = async() => {
+    await fs.promises.writeFile('./ejemplo.txt', 'Hola soy un ejemplo')
+    let resultado = await fs.promises.readFile('./ejemplo.txt', 'utf-8')
+    console.log(resultado)
+}
+prueba()
+const coleccion = {};
+function getRandomInt() {
+    for (let i = 0; i < 10; i++){
+    const num = Math.ceil(Math.random() * 20)
+    coleccion[num] = coleccion[num] ? coleccion[num] + 1 : 1
+   }
+  }
+getRandomInt()
+console.log(coleccion)*/
+
+
+import moment from 'moment';
+let nacimiento = moment("2002-9-21",'YYYY-MM-DD')
+let actual = moment()
+if(nacimiento.isValid()){
+    console.log(nacimiento)
+}else{
+    console.log('es menor')
+}
+let daysN =  actual.diff(nacimiento, 'years')
+console.log(daysN)
