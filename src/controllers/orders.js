@@ -28,7 +28,6 @@ export const create = async (body) => {
     user: userId,
   } = body
   console.log('Here')
-  console.log(productsRequest)
   const user = await getUserById(userId)
   if (!user) {
     throw new NotFoundException('User not found')
@@ -38,8 +37,9 @@ export const create = async (body) => {
     throw new NotFoundException('Business not found')
   }
 const products = productsRequest.reduce((result, item)=> {
-    const product = business.products.find((product) => product.id == item.id)
-    console.log(business)
+    console.log("Saber si existe el prouct:",productsRequest.product)
+    const product = business.products.find((product) => product.id == item.product)
+    console.log(product)
     if (product) {
       result.push({
         id: item.id,
@@ -49,7 +49,7 @@ const products = productsRequest.reduce((result, item)=> {
     }
     return result
   }, [])
-  const total = productsRequest.reduce((acc, product) => {
+  const total = products.reduce((acc, product) => {
     return acc + product.price * product.quantity
   }, 0)
  
