@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url'
 import routers from "./routes/index.router.js";
 import cookieParser from "cookie-parser";
 import initPassport from './config/passport.config.js'
+import ServiceEmail from "./servicios/email.js";
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
@@ -17,6 +18,27 @@ const app = express();
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use('/static',express.static(path.join(__dirname, 'public')))
+app.get('/email', async (req, res) => {
+    const result = await ServiceEmail.sendEmail(
+      'toretoltt818@gmail.com',
+      'Hola. Cómo estás?',
+      `
+      <div>
+        <h1>Hola. Cómo estás?</h1>
+        <p>Con este enlace podras cambiar tu contraseña</p>
+        <a href="http://localhost:8080/new-password?token=${Date.now()}">Cambiar contraseña</a>
+        <p>Saludos.</p>
+      </div>
+      `,
+    )
+    console.log(result)
+    res.send(`
+    <div>
+      <h1>Hello email!</h1>
+      <a href="/">Go back</a>
+    </div>
+    `)
+  })
 /*app.use(expressSession({ 
 store: MongoStore.create({
     mongoUrl:"mongodb+srv://Luciano:w0z4V22sIOUPDcnN@cluster0.ulcy2bz.mongodb.net/sessions?retryWrites=true&w=majority",
