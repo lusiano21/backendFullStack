@@ -1,7 +1,25 @@
 import UsuarioModel from "../models/usuario.js";
 import { validatePassword,tokenGenerator, createHash } from "../utils/configBcrypt.js";
-class UsuariosControllers {
+import { createUser, getUsers } from "../dao/user.js";
+
+ export const create = async (body) => {
+      const user = await createUser(body)
+      return {
+        status: 'success',
+        payload: user,
+      }
+    }
+  export const get = async (query = {}) => {
+      const users = await getUsers(query)
+      return {
+        status: 'success',
+        payload: users,
+      }
+    }
+/*    class UsuariosControllers {
     // CREATE
+   
+    
     static async login(req, res) {
       const { body: { gmail, password } } = req
       const user = await UsuarioModel.findOne({ gmail })
@@ -62,4 +80,4 @@ class UsuariosControllers {
     }
     
   }
-  export default UsuariosControllers;
+  export default UsuariosControllers;*/

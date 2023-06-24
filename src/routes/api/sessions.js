@@ -2,12 +2,11 @@ import passport from 'passport'
 import UsuarioModel from "../../models/usuario.js";
 import { createHash} from '../../utils/configBcrypt.js'
 import { Router } from 'express'
-import UsuariosControllers from '../../controllers/usuarios.js';
 
 const router = Router()
 
-.post('/login', UsuariosControllers.login)
-.post('/register', UsuariosControllers.create)
+//.post('/login', UsuariosControllers.login)
+//.post('/register', UsuariosControllers.create)
 
 
 router.post('/reset', async (req, res) => {

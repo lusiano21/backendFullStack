@@ -70,3 +70,8 @@ export const authJWTMiddleware =  (roles) => (req, res, next) => {
     next()
   })(req, res, next)
 }
+export class NotFoundException extends Exception {
+  constructor(message = 'Not found entity') {
+    super(message, 404)
+  }
+}
