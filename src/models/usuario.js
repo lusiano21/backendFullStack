@@ -8,16 +8,19 @@ const usuario = new mongoose.Schema({
   rol:{ type: String, default: 'user',enum: ['admin', 'user'] },
   email: { type: String, require: true, unique: true },
   password:{ type: String, require: true },
-  orders: [{
+  orders: { type: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Order'
-  }],
+  }],  default: []} ,
   domicilios: { type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Domicilio' }], default: [] }
 }, { timestamps: true })
 
 usuario.plugin(mongoosePaginate);
 usuario.pre('find', function () {
     this.populate('domicilios')
-  })
+})
+usuario.pre('find', function () {
+  this.populate('orders')
+})
 
 export default mongoose.model('Usuario', usuario)

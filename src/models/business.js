@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 const businessSchema = new mongoose.Schema({
-  name: String,
+  name: { type:String, require:true },
   products: [Object],
 }, { timestamps: true })
 

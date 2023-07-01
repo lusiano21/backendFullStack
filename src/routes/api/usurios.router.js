@@ -1,17 +1,47 @@
 import { Router } from 'express'
 import { authJWTMiddleware, createHash } from '../../utils/configBcrypt.js'
-import usuario from '../../models/usuario.js'
-import { create, get } from '../../controllers/usuarios.js'
-const router = Router()
+import { create, get, updateById, removeById, getById } from '../../controllers/usuarios.js'
+import CustomError from '../../utils/errors/CustomErros.js'
+import EnumsError from '../../utils/errors/EnumsError.js'
+import { generatorUserError } from '../../utils/errors/MessagesError.js'
 
+const router = Router()
 router
   .post('/user', async (req,res,next) => {
     try {
-      const { body } = req
+      //const { body } = req
+      const {
+        nombre,
+        apellido,
+        email,
+        dni,
+        edad,
+        password
+      } = req.body
+      if (!nombre || !apellido || !email || !dni || !edad || !password) {
+        CustomError.createError({
+          name: 'User creating error',
+          cause: generatorUserError({
+            nombre,
+            apellido,
+            email,
+            dni,
+            edad,
+            password
+          }),
+          message: 'Error trying to create user',
+          code: EnumsError.INVALID_TYPES_ERROR,
+        })
+      }
       const user = await create({
-        ...body,
-        password: createHash(body.password),
+        nombre,
+        apellido,
+        email,
+        dni,
+        edad,
+        password: createHash(password),
       })
+      console.log(user)
       res.status(201).json(user)
     } catch (error) {
       next(error)
@@ -26,7 +56,16 @@ router
       next(error)
     }
   })
-  //.get('/me', authJWTMiddleware(['admin','user']), UsuariosControllers.me)
+  .get('/me', authJWTMiddleware(['admin','user']), async (req, res, next) =>{ 
+    try{
+    //res.json({ success: true, message: 'This is a private route.', user: req.user })
+    const { id }  = req.user
+    const user = await getById(id)
+    res.status(200).json(user)
+    } catch (error) {
+      next(error)
+    }
+  })
   //.get('/user/:id', UsuariosControllers.getById)
   .put('/user/:id', async (req, res, next) =>{
     try {

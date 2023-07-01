@@ -6,9 +6,15 @@ export default {
     mongoUrl: process.env.MONGODB_URI,
     clueJWT: process.env.CLUE_JWT_SECRET,
     Persistence_Type: process.env.PERSISTENCE_TYPE,
+    NodeEnv: process.env.NODE_ENV,
     NodeMailer: {
         EmailUser:process.env.EMAIL_USER,
         EmailPass:process.env.EMAIL_PASS
+    },
+    Twilio:{
+        PhoneNumber:process.env.TWILIO_PHONE_NUMBER,
+        AccountSid:process.env.TWILIO_ACCOUNT_SID,
+        AuthToken:process.env.TWILIO_AUTH_TOKEN,
     },
     github: {
         ClientId: process.env.CLIENT_ID_GITHUB,

@@ -1,21 +1,61 @@
-import UsuarioModel from "../models/usuario.js";
-import { validatePassword,tokenGenerator, createHash } from "../utils/configBcrypt.js";
-import { createUser, getUsers } from "../dao/user.js";
+import { createUser, getUsers, getUserById, getUserOne, updateUserById, deleteById } from "../dao/user.js";
+import { NotFoundException } from "../utils/configBcrypt.js";
 
- export const create = async (body) => {
-      const user = await createUser(body)
-      return {
-        status: 'success',
-        payload: user,
-      }
-    }
-  export const get = async (query = {}) => {
-      const users = await getUsers(query)
-      return {
-        status: 'success',
-        payload: users,
-      }
-    }
+export const create = async (body) => {
+  const user = await createUser(body)
+  return {
+    status: 'success',
+    payload: user,
+  }
+}
+export const get = async (query = {}) => {
+  const users = await getUsers(query)
+  return {
+    status: 'success',
+    payload: users,
+  }
+}
+export const getById = async (id) => {
+  const user = await getUserById(id)
+  if (!user) {
+    throw new NotFoundException(`User with id ${id} not found`)
+  }
+  return {
+    status: 'success',
+    success: true,
+    payload: user,
+  }
+}
+export const serch = async (body) => {
+  const user = await getUserOne(body)
+  return {
+    status: 'success',
+    payload: user,
+  }
+}
+export const updateById = async (id, body) => {
+  const user = await getUserById(id)
+  if (!user) {
+    throw new NotFoundException(`User with id ${id} not found`)
+  }
+  const result = await updateUserById(id, body)
+  return {
+    status: 'success',
+    payload: result,
+  }
+}
+
+export const removeById = async (id) => {
+  const user = await getUserById(id)
+  if (!user) {
+    throw new NotFoundException(`User with id ${id} not found`)
+  }
+  const result = await deleteById(id)
+  return {
+    status: 'success',
+    payload: result,
+  }
+}
 /*    class UsuariosControllers {
     // CREATE
    

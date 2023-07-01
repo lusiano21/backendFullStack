@@ -10,7 +10,8 @@ import {
 import {
   getBusinessById,
 } from '../dao/business.js'
-
+import twilioService from '../servicios/twilio.service.js'
+import UsuarioModel from '../models/usuario.js'
 import { NotFoundException } from '../utils/configBcrypt.js'
 
 export const get = async (query = {}) => {
@@ -27,22 +28,20 @@ export const create = async (body) => {
     business: businessId,
     user: userId,
   } = body
-  console.log('Here')
   const user = await getUserById(userId)
   if (!user) {
     throw new NotFoundException('User not found')
   }
+  console.log(user)
   const business = await getBusinessById(businessId)
   if (!business) {
     throw new NotFoundException('Business not found')
   }
 const products = productsRequest.reduce((result, item)=> {
-    console.log("Saber si existe el prouct:",productsRequest.product)
     const product = business.products.find((product) => product.id == item.product)
-    console.log(product)
     if (product) {
       result.push({
-        id: item.id,
+        id: item.product,
         price: product.price,
         quantity: item.quantity,
       })
@@ -59,9 +58,10 @@ const products = productsRequest.reduce((result, item)=> {
     products,
     total,
   }
-  console.log(newOrder)
   const order = await createOrder(newOrder)
-
+  await UsuarioModel.updateOne({_id:`${order.id}`}, order)
+  console.log(user)
+  const result = await twilioService.sendSMS('+541158377415', `Hola muchas gracias por tu compra `)
   return {
     status: 'success',
     payload: order,

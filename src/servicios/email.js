@@ -1,19 +1,20 @@
-import nodemailer from 'nodemailer'
+/*import nodemailer from 'nodemailer'
 import config from '../config/config.js';
 class EmailService {
   constructor() {
     this.transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.ethereal.email',
+      port: 587,
       auth: {
-        user: config.NodeMailer.EmailUser,
-        pass: config.NodeMailer.EmailPass,
-      },
+        user: 'kieran72@ethereal.email',
+        pass: 'sRjg4yDdSvHAVWcCuQ'
+    }
     })
   }
 
   sendEmail(to, subject, html) {
     return this.transporter.sendMail({
-      from: config.NodeMailer.EmailUser,
+      from: 'kieran72@ethereal.email',
       to,
       subject,
       html,
@@ -21,4 +22,4 @@ class EmailService {
   }
 }
 
-export default new EmailService();
+export default new EmailService();*/

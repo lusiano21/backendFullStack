@@ -1,6 +1,8 @@
 import http from 'http'
 import { socketInit } from './socketServer.js'
 import app from './src/app.js'
+import cluster from 'cluster'
+import { cpus } from 'os'
 
 const server = http.createServer(app)
 socketInit(server)
