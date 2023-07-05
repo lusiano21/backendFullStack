@@ -26,7 +26,7 @@ export const getById = async (id) => {
     payload: user,
   }
 }
-export const serch = async (body) => {
+export const search = async (body) => {
   const user = await getUserOne(body)
   return {
     status: 'success',

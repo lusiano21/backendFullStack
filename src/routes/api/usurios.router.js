@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import { authJWTMiddleware, createHash } from '../../utils/configBcrypt.js'
-import { create, get, updateById, removeById, getById } from '../../controllers/usuarios.js'
+import { authJWTMiddleware } from '../../utils/configBcrypt.js'
+import { create, get, updateById, removeById, getById, search } from '../../controllers/usuarios.js'
 import CustomError from '../../utils/errors/CustomErros.js'
 import EnumsError from '../../utils/errors/EnumsError.js'
 import { generatorUserError } from '../../utils/errors/MessagesError.js'
@@ -39,7 +39,7 @@ router
         email,
         dni,
         edad,
-        password: createHash(password),
+        password,
       })
       console.log(user)
       res.status(201).json(user)
@@ -56,6 +56,15 @@ router
       next(error)
     }
   })
+  .get('/user/:uid',  async (req, res, next) =>{
+    try {
+      const userId = req.params.uid;
+      const user = await getById(userId);
+      res.status(200).json(user).send({payload:user})
+    } catch (error) {
+      next(error)
+    }
+  })
   .get('/me', authJWTMiddleware(['admin','user']), async (req, res, next) =>{ 
     try{
     //res.json({ success: true, message: 'This is a private route.', user: req.user })
@@ -67,17 +76,17 @@ router
     }
   })
   //.get('/user/:id', UsuariosControllers.getById)
-  .put('/user/:id', async (req, res, next) =>{
+  .put('/user/:uid', async (req, res, next) =>{
     try {
-      const user = await updateById(req.params.id, req.body)
+      const user = await updateById(req.params.uid, req.body)
       res.status(200).json(user)
     } catch (error) {
       next(error)
     }
   })
-  .delete('/user/:id', async (req, res, next)=>{
+  .delete('/user/:uid', async (req, res, next)=>{
     try {
-      const user = await removeById(req.params.id)
+      const user = await removeById(req.params.uid)
       res.status(200).json(user)
     } catch (error) {
       next(error)

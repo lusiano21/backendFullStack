@@ -9,7 +9,8 @@ import cookieParser from "cookie-parser";
 import initPassport from './config/passport.config.js'
 import errorMiddleware from './utils/errors/MiddlewareError.js'
 import { addLogger } from "./utils/logger.js";
-
+import swaggerJsDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -21,17 +22,21 @@ const app = express();
 app.use(addLogger)
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use('/static',express.static(path.join(__dirname, 'public')))
-/*app.use(expressSession({ 
-  store: MongoStore.create({
-    mongoUrl:"mongodb+srv://Luciano:w0z4V22sIOUPDcnN@cluster0.ulcy2bz.mongodb.net/sessions?retryWrites=true&w=majority",
-    mongoOptions: {}, 
-    ttl:15
-  }),    
-  secret: "uhifheifhsi7324HUDHWSIFG",
-  resave: false,
-    saveUninitialized: false
-}));*/
+const swaggerOptions = {
+  definition:{
+    openapi:'3.0.1',
+    info:{
+      title:'Adoptme API',
+      description:'Esta es la documentación de la API de Adoptme. Una aplicación para adoptar mascotas',
+    },
+  },
+  apis:[path.join(__dirname, 'docs','**','*.yaml')],
+};
+app.use(express.static(path.join(__dirname, 'public')))
+
+
+
+const specs = swaggerJsDoc(swaggerOptions);
 app.use(cookieParser())
 const hbs = create({ defaultLayout: 'index',
 extname:'.hbs'});
@@ -45,6 +50,7 @@ initPassport()
 
 app.use(passport.initialize())
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use('/', routers)
 app.use(errorMiddleware)
 
