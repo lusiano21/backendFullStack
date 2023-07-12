@@ -23,7 +23,7 @@
         console.log('data:', data);
         if (data.success) {
           alert('Login successfully. Redirecting to private page...')
-          window.location.href = '/static/me.html'
+          window.location.href = '/me.html'
         } else {
           alert(data.message);
         }

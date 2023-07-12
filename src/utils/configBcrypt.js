@@ -3,6 +3,8 @@ import jsonwebtoken from 'jsonwebtoken'
 import passport from 'passport'
 import multer from 'multer'
 import config from '../config/config.js'
+import bcrypt from 'bcrypt';
+
 
 const JWT_SECRET = config.clueJWT
 import Exception from './exception.js'
@@ -45,13 +47,13 @@ export const isValidToken = (token) => {
   })
 }
 
-/*export const createHash = (password) => {
+export const createHash = (password) => {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(10))
 }
 
 export const validatePassword = (password, user) => {
   return bcrypt.compareSync(password, user.password)
-}*/
+}
 export const authJWTMiddleware =  (roles) => (req, res, next) => {
   passport.authenticate('jwt', function (error, user, info) {  
     if (error) {

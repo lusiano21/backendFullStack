@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { authJWTMiddleware } from '../../utils/configBcrypt.js'
+import { authJWTMiddleware, createHash } from '../../utils/configBcrypt.js'
 import { create, get, updateById, removeById, getById, search } from '../../controllers/usuarios.js'
 import CustomError from '../../utils/errors/CustomErros.js'
 import EnumsError from '../../utils/errors/EnumsError.js'
@@ -39,7 +39,7 @@ router
         email,
         dni,
         edad,
-        password,
+        password: createHash(password),
       })
       console.log(user)
       res.status(201).json(user)

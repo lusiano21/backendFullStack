@@ -1,7 +1,7 @@
 import passport from 'passport'
 import UsuarioModel from "../../models/usuario.js";
 import { Router } from 'express'
-import { tokenGenerator} from '../../utils/configBcrypt.js';
+import { tokenGenerator, createHash, validatePassword} from '../../utils/configBcrypt.js';
 
 const router = Router()
 
@@ -11,7 +11,7 @@ router.post('/login', async (req,res) => {
       if (!user) {
         return res.status(401).json({ message: 'gmail or password incorrect' })
       }
-      if (!password) {
+      if (!validatePassword(password, user)) {
         return res.status(401).json({ message: 'gmail or password incorrect' })
       }
       const token = tokenGenerator(user)
@@ -30,8 +30,7 @@ router.post('/login', async (req,res) => {
   } catch (error) {
     next(error)
   }
-})
-
+})*/
 router.post('/reset', async (req, res) => {
     const {
       body: {
@@ -52,7 +51,7 @@ router.post('/reset', async (req, res) => {
     user.password = createHash(password)
     await UsuarioModel.updateOne({ email }, user) 
     res.redirect('/login')
-})*/
+})
 router.get('/github/callback', passport.authenticate('github', { failureRedirect: '/login' }), (req, res) => {
     req.session.user = req.user
     res.redirect('/profile')
