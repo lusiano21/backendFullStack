@@ -12,7 +12,7 @@ import {
 } from '../dao/business.js'
 import twilioService from '../servicios/twilio.service.js'
 import UsuarioModel from '../models/usuario.js'
-import { NotFoundException } from '../utils/configBcrypt.js'
+import { NotFoundException } from '../utils/exception.js'
 
 export const get = async (query = {}) => {
   const orders = await getOrders(query)
@@ -24,18 +24,18 @@ export const get = async (query = {}) => {
 
 export const create = async (body) => {
   let {
-    products: productsRequest,
-    business: businessId,
     user: userId,
+    business: businessId,
+    products: productsRequest,
   } = body
+  console.log("body de order", body)
   const user = await getUserById(userId)
   if (!user) {
-    throw new NotFoundException('User not found')
+    throw res.json({ status: 404 , message: 'Nose encontro el usuario' })
   }
-  console.log(user)
   const business = await getBusinessById(businessId)
   if (!business) {
-    throw new NotFoundException('Business not found')
+    throw res.json({ status: 404 , message: 'Nose encontro el negocio' })
   }
 const products = productsRequest.reduce((result, item)=> {
     const product = business.products.find((product) => product.id == item.product)
@@ -59,9 +59,7 @@ const products = productsRequest.reduce((result, item)=> {
     total,
   }
   const order = await createOrder(newOrder)
-  await UsuarioModel.updateOne({_id:`${order.id}`}, order)
-  console.log(user)
-  const result = await twilioService.sendSMS('+541158377415', `Hola muchas gracias por tu compra `)
+  //const result = await twilioService.sendSMS('+541158377415', `Hola muchas gracias por tu compra `)
   return {
     status: 'success',
     payload: order,

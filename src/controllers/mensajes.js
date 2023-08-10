@@ -6,6 +6,7 @@ class MensajesController {
   static async create(req, res) {
     const { body } = req
     const mensaje = await MensajeModel.create(body)
+    emit(mensaje)
     res.status(201).json(mensaje)
   }
 

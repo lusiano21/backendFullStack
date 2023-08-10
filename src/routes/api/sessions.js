@@ -1,6 +1,8 @@
 import passport from 'passport'
 import UsuarioModel from "../../models/usuario.js";
+import { uploader } from '../../utils/multer.js';
 import { Router } from 'express'
+import { create } from '../../controllers/usuarios.js';
 import { tokenGenerator, createHash, validatePassword} from '../../utils/configBcrypt.js';
 
 const router = Router()
@@ -20,17 +22,8 @@ router.post('/login', async (req,res) => {
         httpOnly: true,
       }).status(200).json({ success: true })
 })
-//.post('/register', UsuariosControllers.create)
-/*.get('/me', authJWTMiddleware(['admin','user']), async (req, res) =>{ 
-  try{
-  const { id }  = req.user
-  const user = await  getById(id) //UsuarioModel.findById(id)
-  res.status(200).json(user)
-  res.render('me', user)
-  } catch (error) {
-    next(error)
-  }
-})*/
+router.post('/register', uploader.single('avatar'), create)
+
 router.post('/reset', async (req, res) => {
     const {
       body: {

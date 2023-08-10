@@ -7,6 +7,8 @@ export default {
     clueJWT: process.env.CLUE_JWT_SECRET,
     Persistence_Type: process.env.PERSISTENCE_TYPE,
     NodeEnv: process.env.NODE_ENV,
+    NodeHost: process.env.NODE_HOST,
+    NodePort: process.env.NODE_PORT,
     NodeMailer: {
         EmailUser:process.env.EMAIL_USER,
         EmailPass:process.env.EMAIL_PASS

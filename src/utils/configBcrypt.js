@@ -1,7 +1,6 @@
 
 import jsonwebtoken from 'jsonwebtoken'
 import passport from 'passport'
-import multer from 'multer'
 import config from '../config/config.js'
 import bcrypt from 'bcrypt';
 
@@ -9,17 +8,6 @@ import bcrypt from 'bcrypt';
 const JWT_SECRET = config.clueJWT
 import Exception from './exception.js'
 
-const storage = multer.diskStorage({
-    destination: function(req, file, cb){
-        cb(null, './public/img')
-    },
-    filename: function(req, file, cb){
-        cb(null, file.originalname)
-    }
-
-})
-
-export const upleader = multer({storage})
 export const tokenGenerator = (user) => {
   const payload = {
     id: user._id,
@@ -65,15 +53,10 @@ export const authJWTMiddleware =  (roles) => (req, res, next) => {
     if (!roles.includes(user.rol)) { // Autorización
       return next(new Exception('Forbidden' , 403))
     }
-    if (user.rol === 'user' && req.params.id && req.params.id !== student.id) {
+    if (user.rol === 'user' && req.params.uid && req.params.uid !== user.id) {
       return next(new Exception('Forbidden' , 403))
     }
     req.user = user
     next()
   })(req, res, next)
-}
-export class NotFoundException extends Exception {
-  constructor(message = 'Not found entity') {
-    super(message, 404)
-  }
 }

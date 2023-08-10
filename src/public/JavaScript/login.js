@@ -10,7 +10,6 @@
       email: inputEmail.value,
       password: inputPassword.value,
     };
-
     fetch('/api/sessions/login', {
       method: 'POST',
       headers: {
@@ -20,10 +19,9 @@
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('data:', data);
         if (data.success) {
           alert('Login successfully. Redirecting to private page...')
-          window.location.href = '/me.html'
+          window.location.href = '/static/me.html'
         } else {
           alert(data.message);
         }

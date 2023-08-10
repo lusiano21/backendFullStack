@@ -1,29 +1,81 @@
 import { createUser, getUsers, getUserById, getUserOne, updateUserById, deleteById } from "../dao/user.js";
-import { NotFoundException } from "../utils/configBcrypt.js";
+import { createHash } from "../utils/configBcrypt.js";
+import CustomError from '../utils/errors/CustomErros.js'
+import EnumsError from '../utils/errors/EnumsError.js'
+import { generatorUserError } from '../utils/errors/MessagesError.js'
+import config from '../config/config.js'
 
-export const create = async (body) => {
-  const user = await createUser(body)
-  return {
-    status: 'success',
-    payload: user,
+export const create = async (req, res, next ) => {
+  try {
+    const {
+      nombre,
+      apellido,
+      email,
+      dni,
+      edad,
+      password
+    } = req.body
+    const { file } = req
+    if (!nombre || !apellido || !email || !dni || !edad || !password) {
+      CustomError.createError({
+        name: 'User creating error',
+        cause: generatorUserError({
+          nombre,
+          apellido,
+          email,
+          dni,
+          edad,
+          password
+        }),
+        message: 'Error trying to create user',
+        code: EnumsError.INVALID_TYPES_ERROR,
+      })
+    }
+    const user = await createUser({
+      nombre,
+      apellido,
+      email,
+      avatar:`${config.NodeHost}:${config.NodePort}/static/img/${file.originalname}`,
+      dni,
+      edad,
+      password: createHash(password),
+    })
+    res.status(201).json(user)
+    
+  } catch (error) {
+    next(error)
+  }
+  
+}
+export const get = async (req,res,next) => {
+  try {
+    const users = await getUsers(req.query)
+    res.status(200).json(users)
+  } catch (error) {
+    console.log(error)
+    next(error)
   }
 }
-export const get = async (query = {}) => {
-  const users = await getUsers(query)
-  return {
-    status: 'success',
-    payload: users,
-  }
-}
-export const getById = async (id) => {
+export const me = async (req, res, next) => {
+try{
+  const { id } = req.user
   const user = await getUserById(id)
-  if (!user) {
-    throw new NotFoundException(`User with id ${id} not found`)
-  }
-  return {
-    status: 'success',
-    success: true,
-    payload: user,
+  res.status(200).send({success:true, payload:user})
+} catch (error) {
+    next(error)
+}
+
+}
+export const getById = async (req,res, next) => {
+  try {
+    const { params: {uid} } = req
+    const user = await getUserById(uid);
+    if (!user) {
+      res.json({ status: 404 , message: 'Nose encontro el usuario' })
+    } else
+    {res.status(200).json(user)}
+  } catch (error) {
+    next(error)
   }
 }
 export const search = async (body) => {
@@ -33,91 +85,31 @@ export const search = async (body) => {
     payload: user,
   }
 }
-export const updateById = async (id, body) => {
-  const user = await getUserById(id)
-  if (!user) {
-    throw new NotFoundException(`User with id ${id} not found`)
-  }
-  const result = await updateUserById(id, body)
-  return {
-    status: 'success',
-    payload: result,
+export const updateById = async (req,res,next) => {
+  try {
+    const { body, params: {uid} } = req
+    const user = await getUserById(uid)
+    if(!user){
+      res.json({ status: 404 , message: 'Nose encontro el usuario' })
+    } else {
+      const result = await updateUserById(uid, body)
+      res.status(200).json(result)
+    }
+  } catch (error) {
+    next(error)
   }
 }
-
-export const removeById = async (id) => {
-  const user = await getUserById(id)
-  if (!user) {
-    throw new NotFoundException(`User with id ${id} not found`)
-  }
-  const result = await deleteById(id)
-  return {
-    status: 'success',
-    payload: result,
+export const removeById = async (req,res,next) => {
+  try {
+    const { params: {uid} } = req
+    const user = await getUserById(uid)
+    if(!user){
+      res.json({ status: 404 , message: 'Nose encontro el usuario' })
+    } else {
+    const result = await deleteById(uid)
+    res.status(200).json(result)
+    }
+  } catch (error) {
+    next(error)
   }
 }
-/*    class UsuariosControllers {
-    // CREATE
-   
-    
-    static async login(req, res) {
-      const { body: { gmail, password } } = req
-      const user = await UsuarioModel.findOne({ gmail })
-      if (!user) {
-        return res.status(401).json({ message: 'gmail or password incorrect' })
-      }
-      if (!validatePassword(password, user)) {
-        return res.status(401).json({ message: 'gmail or password incorrect' })
-      }
-  
-      const token = tokenGenerator(user)
-      res.cookie('token', token, {
-        maxAge: 60 * 60 * 1000,
-        httpOnly: true,
-      }).status(200).json({ success: true })
-    }
-      static async me(req, res) {
-      const { id }  = req.user
-      const result = await UsuarioModel.findById(id)
-      if (!result) {
-        return res.status(404).end()
-      }
-      res.status(200).json(result)
-    }
-    static async create(req, res) {
-      const { body } = req
-      const usuario = {
-        ...body,
-        password: createHash(body.password),
-      }
-      const result = await UsuarioModel.create(usuario)
-      res.status(201).json(result)
-    }
-    static async get(req, res) {
-      const result = await UsuarioModel.find()
-      res.status(200).json(result)
-    }
-  
-    static async getById(req, res) {
-      const { params: { id } } = req
-      const result = await UsuarioModel.findById(id)
-      if (!result) {
-        return res.status(404).end()
-      }
-      res.status(200).json(result)
-    }
-  
-    static async updateById(req, res) {
-      const { params: { id }, body } = req
-      await UsuarioModel.updateOne({ _id: id }, { $set: body })
-      res.status(204).end()
-    }
-  
-    static async deleteById(req, res) {
-      const { params: { id } } = req
-      await UsuarioModel.deleteOne({ _id: id })
-      res.status(204).end()
-    }
-    
-  }
-  export default UsuariosControllers;*/

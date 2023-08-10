@@ -1,5 +1,6 @@
 import UsuarioModel from '../models/usuario.js'
 import UsuarioDTO from '../dto/Usuario.js'
+
 export const createUser = (user) => {
     const constactDto = new UsuarioDTO(user)
     return UsuarioModel.create(constactDto)
@@ -9,7 +10,7 @@ export const createUser = (user) => {
     return UsuarioModel.find(query)
   }
 
-  export const getUserById = (id) => {
+  export const getUserById = (id) => { 
     return UsuarioModel.findById(id)
   }
 

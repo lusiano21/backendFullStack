@@ -4,6 +4,7 @@ import mongoosePaginate from "mongoose-paginate-v2";
 const usuario = new mongoose.Schema({
   fullname: { type:String, require:true },
   edad: { type: Number, require: true },
+  avatar: { type:String },
   dni: { type: String, require: true, unique: true },
   rol:{ type: String, default: 'user',enum: ['admin', 'user'] },
   email: { type: String, require: true, unique: true },

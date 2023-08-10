@@ -1,9 +1,7 @@
 import { init } from "./db/mongodb.js";
 import  express  from "express";
-import { create } from 'express-handlebars';
 import path from 'path'
 import passport from "passport";
-import { fileURLToPath } from 'url'
 import routers from "./routes/index.router.js";
 import cookieParser from "cookie-parser";
 import initPassport from './config/passport.config.js'
@@ -11,9 +9,7 @@ import errorMiddleware from './utils/errors/MiddlewareError.js'
 import { addLogger } from "./utils/logger.js";
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+import __dirname from "./utils.js";
 
 await init()
 
@@ -32,19 +28,16 @@ const swaggerOptions = {
   },
   apis:[path.join(__dirname, 'docs','**','*.yaml')],
 };
-app.use(express.static(path.join(__dirname, 'public')))
+console.log('__dirname',__dirname)
+app.use('/static', express.static(path.join(__dirname, './public')))
 
 
 
 const specs = swaggerJsDoc(swaggerOptions);
 app.use(cookieParser())
-const hbs = create({ defaultLayout: 'index',
-extname:'.hbs'});
 
-app.engine('hbs', hbs.engine);
-
-app.set('view engine',  'hbs');
-app.set('views', path.join(__dirname ,'views'))
+app.set('view engine', 'hbs')
+app.set('views', './views')
 
 initPassport()
 
@@ -55,10 +48,11 @@ app.use('/', routers)
 app.use(errorMiddleware)
 
 app.use((err, req, res, next) => {
-    req.logger.warning( 'Cuidaddo ',err)
+    //req.logger.warning( 'Cuidado ',error)
+    console.err('Error Middleware', err)
     res
-      .status(err.statusCode || 500)
-      .json({ success: false, message: err.message })
+      .status(err.status || 500)
+      .json({ message: err.message })
   })
 
 export default app

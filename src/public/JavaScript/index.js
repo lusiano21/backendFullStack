@@ -1,36 +1,40 @@
-(function (){
-    const socket = io();
+/*(function() {
+    const inputNombre = document.getElementById('nombre');
+    const inputApellido = document.getElementById('password');
+    const inputEmail = document.getElementById('email');
+    const inputEdad = document.getElementById('edad');
+    const inputDni = document.getElementById('dni');
+    const inputAvatar = document.getElementById('avatar');
+    const inputPassword = document.getElementById('password');
+    const formRegister = document.getElementById('form-register')
+    formRegister.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const data = {
+          nombre: inputNombre.value,
+          apellido: inputApellido.value,
+          email: inputEmail.value,
+          edad: inputEdad.value,
+          dni: inputDni.value,
+          avatar: inputAvatar.value,
+          password: inputPassword.value,
 
-    const formMessage = document.getElementById('form-message');
-    const inputFullname= document.getElementById('input-fullname');
-    const inputMessage = document.getElementById('input-message');
-    const listMessages = document.getElementById('list-messages');
-
-    function showMessage(data) {
-      const li = document.createElement('li');
-      li.className = "list-group-item";
-      li.innerHTML = `<p><strong>${data.nombre}</strong>: ${data.mensaje}</p>`;
-      listMessages.appendChild(li);
-    }
-  
-    formMessage.addEventListener('submit', (event) => {
-      event.preventDefault();
-      const data = {
-        nombre: inputFullname.value,
-        mensaje: inputMessage.value,
-      };
-      socket.emit('new-message', data);
-      inputMessage.value = '';
-      inputMessage.focus();
-    });
-  
-    socket.on('connect', () => {
-      console.log('Conectados al servidor');
-    });
-
-  
-    socket.on('notification', (data) => {
-      showMessage(data);
-    });
-  
-})();
+        };
+    console.log()
+fetch('/api/sessions/user', {
+    method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+})
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert('Login successfully. Redirecting to private page...')
+            window.location.href = '/static/.html'
+          } else {
+            alert(data.message);
+          }
+    })
+})
+})();*/

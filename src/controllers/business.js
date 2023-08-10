@@ -6,10 +6,6 @@ import {
     deleteBusinessById,
   } from '../dao/business.js'
   
-  import {
-    NotFoundException,
-  } from '../utils/configBcrypt.js'
-  
   export const get = async (query = {}) => {
     const business = await getBusinesses(query)
     return {
@@ -29,34 +25,39 @@ import {
   export const getById = async (id) => {
     const business = await getBusinessById(id)
     if (!business) {
-      throw new NotFoundException(`Business with id ${id} not found`)
-    }
-    return {
+      res.json({ status: 404 , message: 'Nose encontro el business' })
+    } else {
+      return {
       status: 'success',
       payload: business,
     }
+    }
+    
   }
   
   export const updateById = async (id, body) => {
     const business = await getBusinessById(id)
     if (!business) {
-      throw new NotFoundException(`Business with id ${id} not found`)
-    }
-    const result = await updateBusinessById(id, body)
+      res.json({ status: 404 , message: 'Nose encontro el business' })
+    } else {
+      const result = await updateBusinessById(id, body)
     return {
       status: 'success',
       payload: result,
     }
+    }
+    
   }
   
   export const removeById = async (id) => {
     const business = await getBusinessById(id)
     if (!business) {
-      throw new NotFoundException(`Business with id ${id} not found`)
-    }
-    const result = await deleteBusinessById(id)
+      res.json({ status: 404 , message: 'Nose encontro el business' })
+    } else {
+      const result = await deleteBusinessById(id)
     return {
       status: 'success',
       payload: result,
+    }
     }
   }
