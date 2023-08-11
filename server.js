@@ -1,14 +1,15 @@
 import http from 'http'
 import { socketInit } from './socketServer.js'
 import app from './src/app.js'
+import config from './src/config/config.js'
 
 const server = http.createServer(app)
 socketInit(server)
-const PORT = process.env.NODE_PORT || 8080
-const ENV = process.env.NODE_ENV || 'local'
+const PORT = config.NodePort || 8080
+const ENV = config.NodeEnv || 'local'
 
 server.listen(PORT, () => {
-  console.log(`Server running in http://localhost:${PORT}/static in ${ENV} environment.`)
+  console.log(`Listening on ${PORT} in ${ENV} environment.`)
 })
 
 process.on('exit', () => {
