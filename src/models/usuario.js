@@ -8,6 +8,7 @@ const usuario = new mongoose.Schema({
   dni: { type: String, require: true, unique: true },
   rol:{ type: String, default: 'user',enum: ['admin', 'user'] },
   email: { type: String, require: true, unique: true },
+  phone: { type:Number, require:true},
   password:{ type: String, require: true },
   orders: { type: [{
     type: mongoose.Schema.Types.ObjectId,

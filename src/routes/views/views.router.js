@@ -4,16 +4,8 @@ import CommunsUtil from "../../utils/utils.views.js";
 import MensajeModel from "../../models/mensaje.js";
 import MensajesController from "../../controllers/mensajes.js";
 import passport from "passport";
-import { authJWTMiddleware } from "../../utils/configBcrypt.js";
 const router = express.Router();
 
-/*const auth = (req, res, next) => {
-  console.log('req.user', req.user);
-  if (req.user) {
-    return next()
-  }
-  res.redirect('/login')
-}*/
 router.get('/', async(req, res)=> {
   const { query: { limit = 2, page = 1, sort} } = req
   const options = {

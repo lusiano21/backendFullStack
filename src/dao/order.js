@@ -1,7 +1,10 @@
 import OrderModel from '../models/order.js'
 
   export const createOrder = (order) => {
-    return OrderModel.create(order)
+    console.log(order)
+    const result = OrderModel.create(order)
+    console.log("result", result)
+    return result
   }
   
   export const getOrders = (query) => {

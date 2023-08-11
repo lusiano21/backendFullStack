@@ -3,6 +3,7 @@ import {
   createOrder,
   getOrderById,
   updateOrderById,
+  deleteOrderById
 } from '../dao/order.js'
 import {
   getUserById,
@@ -11,7 +12,6 @@ import {
   getBusinessById,
 } from '../dao/business.js'
 import twilioService from '../servicios/twilio.service.js'
-import UsuarioModel from '../models/usuario.js'
 import { NotFoundException } from '../utils/exception.js'
 
 export const get = async (query = {}) => {
@@ -28,15 +28,17 @@ export const create = async (body) => {
     business: businessId,
     products: productsRequest,
   } = body
-  console.log("body de order", body)
+  console.log(body)
   const user = await getUserById(userId)
+  console.log(" Paso 1 ",user)
   if (!user) {
-    throw res.json({ status: 404 , message: 'Nose encontro el usuario' })
+    throw new NotFoundException('Order not found')
   }
   const business = await getBusinessById(businessId)
   if (!business) {
-    throw res.json({ status: 404 , message: 'Nose encontro el negocio' })
+    throw new NotFoundException('Order not found')
   }
+console.log(" Paso 1 ",business)
 const products = productsRequest.reduce((result, item)=> {
     const product = business.products.find((product) => product.id == item.product)
     if (product) {
@@ -58,8 +60,12 @@ const products = productsRequest.reduce((result, item)=> {
     products,
     total,
   }
+  console.log(" newOrder ",newOrder)
   const order = await createOrder(newOrder)
-  //const result = await twilioService.sendSMS('+541158377415', `Hola muchas gracias por tu compra `)
+  console.log("order", order)
+  console.log("order", user.phone.toString())
+  const result = await twilioService.sendSMS(`+54${user.phone.toString()}`, `Hola muchas gracias por tu compra `)
+  console.log("Resultado final",result)
   return {
     status: 'success',
     payload: order,

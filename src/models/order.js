@@ -10,7 +10,7 @@ const orderSchema = new mongoose.Schema({
     ref: 'Business'
   },
   products: [{
-    product: {
+    id: {
       type: Number,
     },
     quantity: {
@@ -21,7 +21,7 @@ const orderSchema = new mongoose.Schema({
     },
   }],
   total: Number,
-  status: { type: String, enum: ['pending', 'completed', 'canceled'], default: 'pending' },
+ status: { type: String, enum: ['pending', 'completed', 'canceled'], default: 'pending' },
 }, { timestamps: true })
 
 export default mongoose.model('Order', orderSchema)

@@ -11,18 +11,20 @@ export const create = async (req, res, next ) => {
       nombre,
       apellido,
       email,
+      phone,
       dni,
       edad,
       password
     } = req.body
     const { file } = req
-    if (!nombre || !apellido || !email || !dni || !edad || !password) {
+    if (!nombre || !apellido || !phone || !email || !dni || !edad || !password) {
       CustomError.createError({
         name: 'User creating error',
         cause: generatorUserError({
           nombre,
           apellido,
           email,
+          phone,
           dni,
           edad,
           password
@@ -35,6 +37,7 @@ export const create = async (req, res, next ) => {
       nombre,
       apellido,
       email,
+      phone,
       avatar:`${config.NodeHost}:${config.NodePort}/static/img/${file.originalname}`,
       dni,
       edad,

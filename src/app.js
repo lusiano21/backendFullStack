@@ -47,12 +47,12 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use('/', routers)
 app.use(errorMiddleware)
 
-app.use((err, req, res, next) => {
-    //req.logger.warning( 'Cuidado ',error)
-    console.err('Error Middleware', err)
+app.use((error, req, res, next) => {
+    req.logger.warning( 'Cuidado ',error)
+    console.error('Error en el middelware', error)
     res
-      .status(err.status || 500)
-      .json({ message: err.message })
+      .status(error.status || 500)
+      .send({ message: error.message })
   })
 
-export default app
+export default app 

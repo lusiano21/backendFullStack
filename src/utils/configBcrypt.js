@@ -48,13 +48,13 @@ export const authJWTMiddleware =  (roles) => (req, res, next) => {
       return next(error)
     }
     if (!user) {
-      return next(new Exception('Unauthorized' , 401))
+      return next(res.status(401))
     }
-    if (!roles.includes(user.rol)) { // Autorización
-      return next(new Exception('Forbidden' , 403))
+    if (!roles.includes(user.rol)) {
+      return next(res.status(403))
     }
     if (user.rol === 'user' && req.params.uid && req.params.uid !== user.id) {
-      return next(new Exception('Forbidden' , 403))
+      return next(res.status(403))
     }
     req.user = user
     next()
