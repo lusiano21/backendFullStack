@@ -1,13 +1,12 @@
-import dotenv from 'dotenv';
+import {config} from 'dotenv';
 
-dotenv.config();
+config();
 
 export default {
     mongoUrl: process.env.MONGODB_URI,
     clueJWT: process.env.CLUE_JWT_SECRET,
     Persistence_Type: process.env.PERSISTENCE_TYPE,
     NodeHost: process.env.NODE_HOST,
-    NodeEnv: process.env.NODE_ENV,
     NodePort: process.env.NODE_PORT,
     NodeMailer: {
         EmailUser:process.env.EMAIL_USER,
