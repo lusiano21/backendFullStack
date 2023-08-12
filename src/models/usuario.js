@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import mongoosePaginate from "mongoose-paginate-v2";
+//import mongoosePaginate from "mongoose-paginate-v2";
 
 const usuario = new mongoose.Schema({
   fullname: { type:String, require:true },
@@ -17,7 +17,7 @@ const usuario = new mongoose.Schema({
   domicilios: { type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Domicilio' }], default: [] }
 }, { timestamps: true })
 
-usuario.plugin(mongoosePaginate);
+//usuario.plugin(mongoosePaginate);
 usuario.pre('find', function () {
     this.populate('domicilios')
 })

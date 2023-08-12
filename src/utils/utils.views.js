@@ -17,7 +17,7 @@ class CommunsUtil {
         prevLink: !data.hasPrevPage ? null : `${link}api?limit=${data.limit}&page=${data.prevPage}${sortQueryParam}`,
         nextLink: !data.hasNextPage ? null : `${link}api?limit=${data.limit}&page=${data.nextPage}${sortQueryParam}`,
         sort: data.sort,
-        sortLink: `${process.env.BASE_URL}/students?page=${data.page}&limit=${data.limit}&sort=${data.sort === 'asc' ? 'desc' : 'asc'}`
+        sortLink: `http://localhost:8080/api?page=${data.page}&limit=${data.limit}&sort=${data.sort === 'asc' ? 'desc' : 'asc'}`
       }
     }
   }

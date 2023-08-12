@@ -6,9 +6,10 @@ import config from './src/config/config.js'
 const server = http.createServer(app)
 socketInit(server)
 const PORT = config.NodePort || 8080
+const ENV = config.NodeEnv || 'local'
 
 server.listen(PORT, () => {
-  console.log(`Listening on ${PORT} environment.`)
+  console.log(`Listening on ${PORT} in ${ENV} environment.`)
 })
 
 process.on('exit', () => {

@@ -1,7 +1,6 @@
 import winston from 'winston';
-import config from '../config/config.js';
 
-const env = config.NodeEnv || 'development';
+const env = 'production';
 
 const options = {}
 
@@ -48,9 +47,6 @@ if (env === 'production') {
 }
 
 const logger = winston.createLogger(options)
-
-logger.info(`NODE_ENV=${env}`)
-
 
 export const addLogger = (req, res, next) => {
   req.logger = logger

@@ -43,6 +43,7 @@ export const create = async (req, res, next ) => {
       edad,
       password: createHash(password),
     })
+    console.log('user', user)
     res.status(201).json(user)
     
   } catch (error) {

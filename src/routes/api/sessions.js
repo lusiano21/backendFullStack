@@ -35,15 +35,17 @@ router.post('/reset', async (req, res) => {
       !email ||
       !password
     ) {
-      return res.render('reset', { error: 'Todo los campos debe venir en la solicitud.' })
+      alert('El usuario o contraseña son incorrectas')
+      //return res.render('reset', { error: 'Todo los campos debe venir en la solicitud.' })
     }
     const user = await UsuarioModel.findOne({ email })
     if (!user) {
-      return res.render('reset', { error: 'Email no existe.' })
+      //return res.render('reset', { error: 'Email no existe.' })
+      alert(' El usuario o contraseña son incorrectas')
     }
     user.password = createHash(password)
     await UsuarioModel.updateOne({ email }, user) 
-    res.redirect('/login')
+    res.redirect('/static/login')
 })
 router.get('/github/callback', passport.authenticate('github', { failureRedirect: '/login' }), (req, res) => {
     req.session.user = req.user

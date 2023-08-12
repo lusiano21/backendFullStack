@@ -5,7 +5,6 @@ import passport from "passport";
 import routers from "./routes/index.router.js";
 import cookieParser from "cookie-parser";
 import initPassport from './config/passport.config.js'
-import errorMiddleware from './utils/errors/MiddlewareError.js'
 import { addLogger } from "./utils/logger.js";
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
@@ -28,7 +27,6 @@ const swaggerOptions = {
   },
   apis:[path.join(__dirname, 'docs','**','*.yaml')],
 };
-console.log('__dirname',__dirname)
 app.use('/static', express.static(path.join(__dirname, './public')))
 
 
@@ -45,7 +43,6 @@ app.use(passport.initialize())
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use('/', routers)
-app.use(errorMiddleware)
 
 app.use((error, req, res, next) => {
     req.logger.warning( 'Cuidado ',error)

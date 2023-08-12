@@ -3,6 +3,7 @@ import UsuarioDTO from '../dto/Usuario.js'
 
 export const createUser = (user) => {
     const constactDto = new UsuarioDTO(user)
+    console.log('constactDto',constactDto)
     return UsuarioModel.create(constactDto)
   }
 

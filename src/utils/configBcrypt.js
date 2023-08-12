@@ -48,13 +48,13 @@ export const authJWTMiddleware =  (roles) => (req, res, next) => {
       return next(error)
     }
     if (!user) {
-      return next(res.status(401))
+      return next(new Exception('No esta autentificado', 401))
     }
     if (!roles.includes(user.rol)) {
-      return next(res.status(403))
+      return next(new Exception('No esta autorizado', 403))
     }
     if (user.rol === 'user' && req.params.uid && req.params.uid !== user.id) {
-      return next(res.status(403))
+      return next(new Exception('No esta autorizado', 403))
     }
     req.user = user
     next()
